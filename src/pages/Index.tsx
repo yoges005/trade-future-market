@@ -20,8 +20,21 @@ const Index = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [activeTab, setActiveTab] = useState("buy");
-  const [currentUser, setCurrentUser] = useState("buyer");
+  const [currentUser, setCurrentUser] = useState<any>(null);
   
+  useEffect(() => {
+    // Get user data from localStorage
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
+
   // Expanded mock data with proper placeholder images
   const [products, setProducts] = useState([
     {
@@ -265,6 +278,11 @@ const Index = () => {
                 <TrendingUp className="w-3 h-3 mr-1" />
                 AI-Powered
               </Badge>
+              {currentUser && (
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  {currentUser.type === "buyer" ? "👤 Buyer" : "🏪 Seller"} - {currentUser.city}
+                </Badge>
+              )}
             </div>
             
             <div className="flex items-center space-x-4">
@@ -275,7 +293,7 @@ const Index = () => {
                 className="backdrop-blur-sm"
               >
                 <User className="w-4 h-4 mr-2" />
-                Profile
+                {currentUser?.name || "Profile"}
               </Button>
               <Button
                 onClick={() => setShowSellModal(true)}
@@ -283,6 +301,14 @@ const Index = () => {
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Sell Item
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                Logout
               </Button>
             </div>
           </div>
@@ -299,6 +325,11 @@ const Index = () => {
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Discover amazing deals, connect with verified sellers, and trade with confidence using AI-powered recommendations
           </p>
+          {currentUser && (
+            <p className="text-lg text-purple-600 font-semibold">
+              Welcome back, {currentUser.name}! 🎉
+            </p>
+          )}
         </div>
 
         {/* Search and Filters */}
