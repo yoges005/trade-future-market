@@ -1,12 +1,289 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, MapPin, Heart, Star, MessageCircle, Filter, Plus, User, ShoppingBag, TrendingUp, Zap } from "lucide-react";
+import ProductCard from "@/components/ProductCard";
+import LocationPicker from "@/components/LocationPicker";
+import SellModal from "@/components/SellModal";
+import ChatModal from "@/components/ChatModal";
+import UserProfileModal from "@/components/UserProfileModal";
+import { toast } from "sonner";
 
 const Index = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("All Locations");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [showSellModal, setShowSellModal] = useState(false);
+  const [showChatModal, setShowChatModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [activeTab, setActiveTab] = useState("buy");
+  const [currentUser, setCurrentUser] = useState("buyer");
+  
+  // Mock data for demonstration
+  const [products, setProducts] = useState([
+    {
+      id: 1,
+      title: "iPhone 14 Pro Max",
+      price: 899,
+      originalPrice: 1199,
+      image: "/placeholder.svg",
+      location: "San Francisco, CA",
+      distance: "2.3 km",
+      seller: "TechEnthusiast92",
+      rating: 4.8,
+      condition: "Excellent",
+      category: "Electronics",
+      tags: ["smartphone", "apple", "premium"],
+      timePosted: "2 hours ago",
+      verified: true
+    },
+    {
+      id: 2,
+      title: "Vintage Leather Jacket",
+      price: 150,
+      originalPrice: 300,
+      image: "/placeholder.svg",
+      location: "Los Angeles, CA",
+      distance: "5.1 km",
+      seller: "VintageVibe",
+      rating: 4.9,
+      condition: "Good",
+      category: "Fashion",
+      tags: ["vintage", "leather", "classic"],
+      timePosted: "1 day ago",
+      verified: true
+    },
+    {
+      id: 3,
+      title: "Gaming Setup - RTX 4080",
+      price: 2400,
+      originalPrice: 3200,
+      image: "/placeholder.svg",
+      location: "Seattle, WA",
+      distance: "12.8 km",
+      seller: "GamerPro",
+      rating: 4.7,
+      condition: "Like New",
+      category: "Electronics",
+      tags: ["gaming", "computer", "high-end"],
+      timePosted: "3 hours ago",
+      verified: false
+    }
+  ]);
+
+  const categories = [
+    { id: "all", name: "All Categories", icon: "🔍" },
+    { id: "electronics", name: "Electronics", icon: "📱" },
+    { id: "fashion", name: "Fashion", icon: "👕" },
+    { id: "home", name: "Home & Garden", icon: "🏠" },
+    { id: "vehicles", name: "Vehicles", icon: "🚗" },
+    { id: "sports", name: "Sports", icon: "⚽" },
+    { id: "books", name: "Books", icon: "📚" }
+  ];
+
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = selectedCategory === "all" || 
+                           product.category.toLowerCase() === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleContact = (productId: number) => {
+    setShowChatModal(true);
+    toast.success("Opening chat with seller...");
+  };
+
+  const handleWishlist = (productId: number) => {
+    toast.success("Added to wishlist!");
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-lg">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                  FutureMarket
+                </h1>
+              </div>
+              <Badge variant="secondary" className="bg-green-100 text-green-700">
+                <TrendingUp className="w-3 h-3 mr-1" />
+                AI-Powered
+              </Badge>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowProfileModal(true)}
+                className="backdrop-blur-sm"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Profile
+              </Button>
+              <Button
+                onClick={() => setShowSellModal(true)}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Sell Item
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            The Future of Second-Hand Trading
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Discover amazing deals, connect with verified sellers, and trade with confidence using AI-powered recommendations
+          </p>
+        </div>
+
+        {/* Search and Filters */}
+        <Card className="mb-8 backdrop-blur-sm bg-white/70 border-white/20 shadow-xl">
+          <CardContent className="p-6">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  placeholder="Search for products, brands, or categories..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 h-12 text-lg border-white/20 bg-white/50"
+                />
+              </div>
+              <LocationPicker
+                selectedLocation={selectedLocation}
+                onLocationChange={setSelectedLocation}
+              />
+              <Button variant="outline" size="lg" className="backdrop-blur-sm">
+                <Filter className="w-4 h-4 mr-2" />
+                Filters
+              </Button>
+            </div>
+            
+            {/* Categories */}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {categories.map((category) => (
+                <Badge
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  className={`cursor-pointer transition-all hover:scale-105 ${
+                    selectedCategory === category.id 
+                      ? "bg-gradient-to-r from-purple-600 to-blue-600" 
+                      : "hover:bg-gray-100"
+                  }`}
+                  onClick={() => setSelectedCategory(category.id)}
+                >
+                  {category.icon} {category.name}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tabs for Buy/Sell View */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 backdrop-blur-sm bg-white/70">
+            <TabsTrigger value="buy" className="flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4" />
+              Buy
+            </TabsTrigger>
+            <TabsTrigger value="sell" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              My Listings
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="buy">
+            {/* Product Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onContact={handleContact}
+                  onWishlist={handleWishlist}
+                />
+              ))}
+            </div>
+            
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-12">
+                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-12 h-12 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
+                <p className="text-gray-500">Try adjusting your search terms or filters</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="sell">
+            <Card className="backdrop-blur-sm bg-white/70 border-white/20">
+              <CardHeader>
+                <h3 className="text-xl font-semibold">Your Listings</h3>
+                <p className="text-gray-600">Manage your products and track performance</p>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Plus className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold mb-2">Start Selling Today</h4>
+                  <p className="text-gray-600 mb-4">List your first item and reach thousands of potential buyers</p>
+                  <Button
+                    onClick={() => setShowSellModal(true)}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Listing
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </main>
+
+      {/* Modals */}
+      <SellModal
+        isOpen={showSellModal}
+        onClose={() => setShowSellModal(false)}
+        onSubmit={(data) => {
+          console.log("New listing:", data);
+          toast.success("Listing created successfully!");
+          setShowSellModal(false);
+        }}
+      />
+
+      <ChatModal
+        isOpen={showChatModal}
+        onClose={() => setShowChatModal(false)}
+      />
+
+      <UserProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
     </div>
   );
 };
