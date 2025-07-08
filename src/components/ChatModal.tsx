@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,7 @@ interface ChatModalProps {
 
 interface Message {
   id: number;
-  sender: 'buyer' | 'seller';
+  sender: 'buyer' | 'seller' | 'system';
   message: string;
   timestamp: string;
   type: 'text' | 'offer' | 'system';
