@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ const Index = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [activeTab, setActiveTab] = useState("buy");
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [wishlistedItems, setWishlistedItems] = useState<number[]>([]);
   
   useEffect(() => {
     // Get user data from localStorage
@@ -32,18 +34,19 @@ const Index = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    toast.success("Logged out successfully!");
     window.location.href = "/";
   };
 
-  // Expanded mock data with proper placeholder images
+  // Updated products with Tamil Nadu and Indian locations
   const [products, setProducts] = useState([
     {
       id: 1,
       title: "iPhone 14 Pro Max - Excellent Condition",
-      price: 899,
-      originalPrice: 1199,
+      price: 75000,
+      originalPrice: 95000,
       image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop",
-      location: "San Francisco, CA",
+      location: "Chennai, Tamil Nadu",
       distance: "2.3 km",
       seller: "TechEnthusiast92",
       rating: 4.8,
@@ -55,178 +58,226 @@ const Index = () => {
     },
     {
       id: 2,
-      title: "Vintage Leather Jacket - Authentic",
-      price: 150,
-      originalPrice: 300,
-      image: "https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&h=300&fit=crop",
-      location: "Los Angeles, CA",
-      distance: "5.1 km",
-      seller: "VintageVibe",
+      title: "Royal Enfield Classic 350 - Well Maintained",
+      price: 125000,
+      originalPrice: 180000,
+      image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop",
+      location: "Coimbatore, Tamil Nadu",
+      distance: "15.1 km",
+      seller: "BikeEnthusiast",
       rating: 4.9,
       condition: "Good",
-      category: "Fashion",
-      tags: ["vintage", "leather", "classic"],
+      category: "Vehicles",
+      tags: ["motorcycle", "royal-enfield", "classic"],
       timePosted: "1 day ago",
       verified: true
     },
     {
       id: 3,
-      title: "Gaming Setup - RTX 4080 Complete",
-      price: 2400,
-      originalPrice: 3200,
+      title: "Gaming Laptop RTX 4070 Complete Setup",
+      price: 85000,
+      originalPrice: 120000,
       image: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=400&h=300&fit=crop",
-      location: "Seattle, WA",
-      distance: "12.8 km",
+      location: "Madurai, Tamil Nadu",
+      distance: "45.8 km",
       seller: "GamerPro",
       rating: 4.7,
       condition: "Like New",
       category: "Electronics",
-      tags: ["gaming", "computer", "high-end"],
+      tags: ["gaming", "laptop", "high-end"],
       timePosted: "3 hours ago",
       verified: false
     },
     {
       id: 4,
-      title: "MacBook Pro M2 - Perfect for Work",
-      price: 1599,
-      originalPrice: 1999,
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
-      location: "San Francisco, CA",
-      distance: "1.2 km",
-      seller: "CreativeDesigner",
+      title: "Traditional Silk Sarees Collection",
+      price: 8500,
+      originalPrice: 15000,
+      image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400&h=300&fit=crop",
+      location: "Kanchipuram, Tamil Nadu",
+      distance: "32.2 km",
+      seller: "SilkWeaver",
       rating: 4.9,
-      condition: "Excellent",
-      category: "Electronics",
-      tags: ["laptop", "apple", "professional"],
+      condition: "Brand New",
+      category: "Fashion",
+      tags: ["saree", "silk", "traditional", "kanchipuram"],
       timePosted: "5 hours ago",
       verified: true
     },
     {
       id: 5,
-      title: "Modern Sofa Set - Gray Fabric",
-      price: 800,
-      originalPrice: 1400,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      location: "Portland, OR",
-      distance: "8.5 km",
-      seller: "HomeDecorLover",
+      title: "Wooden Dining Table Set - Teak Wood",
+      price: 25000,
+      originalPrice: 45000,
+      image: "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop",
+      location: "Salem, Tamil Nadu",
+      distance: "85 km",
+      seller: "WoodCraftsman",
       rating: 4.6,
       condition: "Good",
       category: "Home",
-      tags: ["furniture", "living-room", "modern"],
+      tags: ["furniture", "dining-table", "teak", "handmade"],
       timePosted: "1 day ago",
       verified: true
     },
     {
       id: 6,
-      title: "Canon EOS R5 Camera with Lenses",
-      price: 2200,
-      originalPrice: 3500,
+      title: "Canon DSLR Camera with Multiple Lenses",
+      price: 45000,
+      originalPrice: 75000,
       image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
-      location: "Los Angeles, CA",
-      distance: "15.3 km",
+      location: "Tiruchirappalli, Tamil Nadu",
+      distance: "125 km",
       seller: "PhotoPro88",
       rating: 4.8,
       condition: "Excellent",
       category: "Electronics",
-      tags: ["camera", "photography", "professional"],
+      tags: ["camera", "photography", "professional", "dslr"],
       timePosted: "4 hours ago",
       verified: true
     },
     {
       id: 7,
-      title: "Nike Air Jordan Retro - Size 10",
-      price: 180,
-      originalPrice: 220,
+      title: "Air Jordan Retro Collection - Size 9",
+      price: 12000,
+      originalPrice: 18000,
       image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
-      location: "San Diego, CA",
-      distance: "25.7 km",
+      location: "Vellore, Tamil Nadu",
+      distance: "95 km",
       seller: "SneakerHead",
       rating: 4.5,
       condition: "Good",
       category: "Fashion",
-      tags: ["sneakers", "nike", "basketball"],
+      tags: ["sneakers", "nike", "basketball", "collection"],
       timePosted: "6 hours ago",
       verified: false
     },
     {
       id: 8,
-      title: "Electric Guitar Fender Stratocaster",
-      price: 650,
-      originalPrice: 900,
+      title: "Yamaha Acoustic Guitar FG830",
+      price: 18000,
+      originalPrice: 25000,
       image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
-      location: "Nashville, TN",
-      distance: "45.2 km",
+      location: "Thanjavur, Tamil Nadu",
+      distance: "165 km",
       seller: "MusicianLife",
       rating: 4.7,
       condition: "Excellent",
       category: "Music",
-      tags: ["guitar", "electric", "fender"],
+      tags: ["guitar", "acoustic", "yamaha", "musical-instrument"],
       timePosted: "8 hours ago",
       verified: true
     },
     {
       id: 9,
-      title: "Mountain Bike - Trek Full Suspension",
-      price: 1200,
-      originalPrice: 1800,
-      image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop",
-      location: "Denver, CO",
-      distance: "35.1 km",
-      seller: "OutdoorAdventurer",
+      title: "Hero Bicycle - Mountain Bike",
+      price: 8500,
+      originalPrice: 15000,
+      image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=300&fit=crop",
+      location: "Erode, Tamil Nadu",
+      distance: "125 km",
+      seller: "CycleShop",
       rating: 4.6,
       condition: "Good",
       category: "Sports",
-      tags: ["bicycle", "mountain", "trek"],
+      tags: ["bicycle", "mountain-bike", "hero", "cycling"],
       timePosted: "12 hours ago",
       verified: true
     },
     {
       id: 10,
-      title: "Dining Table Set - Wooden Oak",
-      price: 450,
-      originalPrice: 750,
-      image: "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop",
-      location: "Austin, TX",
-      distance: "18.9 km",
-      seller: "FurnitureDeals",
+      title: "Traditional Brass Items Collection",
+      price: 5500,
+      originalPrice: 8500,
+      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+      location: "Kumbakonam, Tamil Nadu",
+      distance: "145 km",
+      seller: "AntiqueBrass",
       rating: 4.4,
       condition: "Good",
       category: "Home",
-      tags: ["dining", "wooden", "family"],
+      tags: ["brass", "traditional", "antique", "home-decor"],
       timePosted: "1 day ago",
       verified: true
     },
     {
       id: 11,
-      title: "Smart Watch Apple Series 8",
-      price: 320,
-      originalPrice: 450,
-      image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400&h=300&fit=crop",
-      location: "Chicago, IL",
-      distance: "7.4 km",
+      title: "OnePlus 11 5G - Mint Condition",
+      price: 35000,
+      originalPrice: 56000,
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop",
+      location: "Tirunelveli, Tamil Nadu",
+      distance: "245 km",
       seller: "TechGuru2023",
       rating: 4.8,
       condition: "Like New",
       category: "Electronics",
-      tags: ["smartwatch", "apple", "fitness"],
+      tags: ["smartphone", "oneplus", "5g", "android"],
       timePosted: "3 hours ago",
       verified: true
     },
     {
       id: 12,
-      title: "Designer Handbag - Coach Original",
-      price: 280,
-      originalPrice: 480,
+      title: "Designer Handbag - Genuine Leather",
+      price: 4500,
+      originalPrice: 8500,
       image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
-      location: "Miami, FL",
-      distance: "22.6 km",
-      seller: "LuxuryFashion",
+      location: "Puducherry",
+      distance: "185 km",
+      seller: "FashionStore",
       rating: 4.9,
       condition: "Excellent",
       category: "Fashion",
-      tags: ["handbag", "coach", "luxury"],
+      tags: ["handbag", "leather", "designer", "accessories"],
       timePosted: "5 hours ago",
+      verified: true
+    },
+    {
+      id: 13,
+      title: "Bajaj Pulsar 150 - Single Owner",
+      price: 65000,
+      originalPrice: 95000,
+      image: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400&h=300&fit=crop",
+      location: "Bangalore, Karnataka",
+      distance: "350 km",
+      seller: "BikeDealer",
+      rating: 4.7,
+      condition: "Good",
+      category: "Vehicles",
+      tags: ["motorcycle", "bajaj", "pulsar", "single-owner"],
+      timePosted: "2 days ago",
+      verified: true
+    },
+    {
+      id: 14,
+      title: "Mixer Grinder - Preethi Blue Leaf",
+      price: 3500,
+      originalPrice: 6500,
+      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
+      location: "Hosur, Tamil Nadu",
+      distance: "65 km",
+      seller: "KitchenAppliances",
+      rating: 4.5,
+      condition: "Good",
+      category: "Home",
+      tags: ["mixer-grinder", "kitchen", "preethi", "appliance"],
+      timePosted: "6 hours ago",
+      verified: false
+    },
+    {
+      id: 15,
+      title: "Cricket Kit - Complete Set with Bag",
+      price: 4500,
+      originalPrice: 8000,
+      image: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=400&h=300&fit=crop",
+      location: "Karur, Tamil Nadu",
+      distance: "115 km",
+      seller: "SportsEquipment",
+      rating: 4.6,
+      condition: "Good",
+      category: "Sports",
+      tags: ["cricket", "sports", "equipment", "complete-set"],
+      timePosted: "1 day ago",
       verified: true
     }
   ]);
@@ -247,16 +298,57 @@ const Index = () => {
                          product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || 
                            product.category.toLowerCase() === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesLocation = selectedLocation === "All Locations" ||
+                           product.location.toLowerCase().includes(selectedLocation.toLowerCase());
+    return matchesSearch && matchesCategory && matchesLocation;
   });
 
   const handleContact = (productId: number) => {
+    console.log("Opening chat for product:", productId);
     setShowChatModal(true);
     toast.success("Opening chat with seller...");
   };
 
   const handleWishlist = (productId: number) => {
-    toast.success("Added to wishlist!");
+    console.log("Toggling wishlist for product:", productId);
+    setWishlistedItems(prev => {
+      if (prev.includes(productId)) {
+        toast.success("Removed from wishlist!");
+        return prev.filter(id => id !== productId);
+      } else {
+        toast.success("Added to wishlist!");
+        return [...prev, productId];
+      }
+    });
+  };
+
+  const handleSellSubmit = (data: any) => {
+    console.log("New listing created:", data);
+    toast.success("Listing created successfully!");
+    setShowSellModal(false);
+    // Add the new product to the list
+    const newProduct = {
+      id: products.length + 1,
+      title: data.title,
+      price: parseFloat(data.price),
+      originalPrice: data.originalPrice ? parseFloat(data.originalPrice) : undefined,
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
+      location: data.location || "Chennai, Tamil Nadu",
+      distance: "0 km",
+      seller: currentUser?.name || "You",
+      rating: 5.0,
+      condition: data.condition,
+      category: data.category,
+      tags: data.tags || [],
+      timePosted: "Just now",
+      verified: false
+    };
+    setProducts(prev => [newProduct, ...prev]);
+  };
+
+  const handleFilterClick = () => {
+    console.log("Filter button clicked");
+    toast.info("Advanced filters coming soon!");
   };
 
   return (
@@ -289,14 +381,20 @@ const Index = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowProfileModal(true)}
+                onClick={() => {
+                  console.log("Profile button clicked");
+                  setShowProfileModal(true);
+                }}
                 className="backdrop-blur-sm"
               >
                 <User className="w-4 h-4 mr-2" />
                 {currentUser?.name || "Profile"}
               </Button>
               <Button
-                onClick={() => setShowSellModal(true)}
+                onClick={() => {
+                  console.log("Sell button clicked");
+                  setShowSellModal(true);
+                }}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -320,14 +418,14 @@ const Index = () => {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            The Future of Second-Hand Trading
+            Tamil Nadu's Premier Marketplace
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Discover amazing deals, connect with verified sellers, and trade with confidence using AI-powered recommendations
+            Discover amazing deals from Tamil Nadu and across India. Connect with verified sellers and trade with confidence!
           </p>
           {currentUser && (
             <p className="text-lg text-purple-600 font-semibold">
-              Welcome back, {currentUser.name}! 🎉
+              Welcome back, {currentUser.name}! 🎉 Showing products near Tamil Nadu
             </p>
           )}
         </div>
@@ -349,7 +447,12 @@ const Index = () => {
                 selectedLocation={selectedLocation}
                 onLocationChange={setSelectedLocation}
               />
-              <Button variant="outline" size="lg" className="backdrop-blur-sm">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="backdrop-blur-sm"
+                onClick={handleFilterClick}
+              >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
               </Button>
@@ -366,7 +469,10 @@ const Index = () => {
                       ? "bg-gradient-to-r from-purple-600 to-blue-600" 
                       : "hover:bg-gray-100"
                   }`}
-                  onClick={() => setSelectedCategory(category.id)}
+                  onClick={() => {
+                    console.log("Category selected:", category.id);
+                    setSelectedCategory(category.id);
+                  }}
                 >
                   {category.icon} {category.name}
                 </Badge>
@@ -380,7 +486,7 @@ const Index = () => {
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 backdrop-blur-sm bg-white/70">
             <TabsTrigger value="buy" className="flex items-center gap-2">
               <ShoppingBag className="w-4 h-4" />
-              Buy
+              Buy ({filteredProducts.length})
             </TabsTrigger>
             <TabsTrigger value="sell" className="flex items-center gap-2">
               <Plus className="w-4 h-4" />
@@ -407,7 +513,7 @@ const Index = () => {
                   <Search className="w-12 h-12 text-gray-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
-                <p className="text-gray-500">Try adjusting your search terms or filters</p>
+                <p className="text-gray-500">Try adjusting your search terms, location, or filters</p>
               </div>
             )}
           </TabsContent>
@@ -423,10 +529,13 @@ const Index = () => {
                   <div className="w-16 h-16 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Plus className="w-8 h-8 text-purple-600" />
                   </div>
-                  <h4 className="text-lg font-semibold mb-2">Start Selling Today</h4>
-                  <p className="text-gray-600 mb-4">List your first item and reach thousands of potential buyers</p>
+                  <h4 className="text-lg font-semibold mb-2">Start Selling in Tamil Nadu</h4>
+                  <p className="text-gray-600 mb-4">List your first item and reach thousands of potential buyers across Tamil Nadu and India</p>
                   <Button
-                    onClick={() => setShowSellModal(true)}
+                    onClick={() => {
+                      console.log("Create listing button clicked");
+                      setShowSellModal(true);
+                    }}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
                   >
                     <Plus className="w-4 h-4 mr-2" />
@@ -442,22 +551,27 @@ const Index = () => {
       {/* Modals */}
       <SellModal
         isOpen={showSellModal}
-        onClose={() => setShowSellModal(false)}
-        onSubmit={(data) => {
-          console.log("New listing:", data);
-          toast.success("Listing created successfully!");
+        onClose={() => {
+          console.log("Sell modal closed");
           setShowSellModal(false);
         }}
+        onSubmit={handleSellSubmit}
       />
 
       <ChatModal
         isOpen={showChatModal}
-        onClose={() => setShowChatModal(false)}
+        onClose={() => {
+          console.log("Chat modal closed");
+          setShowChatModal(false);
+        }}
       />
 
       <UserProfileModal
         isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
+        onClose={() => {
+          console.log("Profile modal closed");
+          setShowProfileModal(false);
+        }}
       />
     </div>
   );
