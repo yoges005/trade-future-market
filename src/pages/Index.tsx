@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,14 +22,14 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("buy");
   const [currentUser, setCurrentUser] = useState("buyer");
   
-  // Mock data for demonstration
+  // Expanded mock data with proper placeholder images
   const [products, setProducts] = useState([
     {
       id: 1,
-      title: "iPhone 14 Pro Max",
+      title: "iPhone 14 Pro Max - Excellent Condition",
       price: 899,
       originalPrice: 1199,
-      image: "/placeholder.svg",
+      image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop",
       location: "San Francisco, CA",
       distance: "2.3 km",
       seller: "TechEnthusiast92",
@@ -43,10 +42,10 @@ const Index = () => {
     },
     {
       id: 2,
-      title: "Vintage Leather Jacket",
+      title: "Vintage Leather Jacket - Authentic",
       price: 150,
       originalPrice: 300,
-      image: "/placeholder.svg",
+      image: "https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&h=300&fit=crop",
       location: "Los Angeles, CA",
       distance: "5.1 km",
       seller: "VintageVibe",
@@ -59,10 +58,10 @@ const Index = () => {
     },
     {
       id: 3,
-      title: "Gaming Setup - RTX 4080",
+      title: "Gaming Setup - RTX 4080 Complete",
       price: 2400,
       originalPrice: 3200,
-      image: "/placeholder.svg",
+      image: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=400&h=300&fit=crop",
       location: "Seattle, WA",
       distance: "12.8 km",
       seller: "GamerPro",
@@ -72,6 +71,150 @@ const Index = () => {
       tags: ["gaming", "computer", "high-end"],
       timePosted: "3 hours ago",
       verified: false
+    },
+    {
+      id: 4,
+      title: "MacBook Pro M2 - Perfect for Work",
+      price: 1599,
+      originalPrice: 1999,
+      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
+      location: "San Francisco, CA",
+      distance: "1.2 km",
+      seller: "CreativeDesigner",
+      rating: 4.9,
+      condition: "Excellent",
+      category: "Electronics",
+      tags: ["laptop", "apple", "professional"],
+      timePosted: "5 hours ago",
+      verified: true
+    },
+    {
+      id: 5,
+      title: "Modern Sofa Set - Gray Fabric",
+      price: 800,
+      originalPrice: 1400,
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+      location: "Portland, OR",
+      distance: "8.5 km",
+      seller: "HomeDecorLover",
+      rating: 4.6,
+      condition: "Good",
+      category: "Home",
+      tags: ["furniture", "living-room", "modern"],
+      timePosted: "1 day ago",
+      verified: true
+    },
+    {
+      id: 6,
+      title: "Canon EOS R5 Camera with Lenses",
+      price: 2200,
+      originalPrice: 3500,
+      image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
+      location: "Los Angeles, CA",
+      distance: "15.3 km",
+      seller: "PhotoPro88",
+      rating: 4.8,
+      condition: "Excellent",
+      category: "Electronics",
+      tags: ["camera", "photography", "professional"],
+      timePosted: "4 hours ago",
+      verified: true
+    },
+    {
+      id: 7,
+      title: "Nike Air Jordan Retro - Size 10",
+      price: 180,
+      originalPrice: 220,
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+      location: "San Diego, CA",
+      distance: "25.7 km",
+      seller: "SneakerHead",
+      rating: 4.5,
+      condition: "Good",
+      category: "Fashion",
+      tags: ["sneakers", "nike", "basketball"],
+      timePosted: "6 hours ago",
+      verified: false
+    },
+    {
+      id: 8,
+      title: "Electric Guitar Fender Stratocaster",
+      price: 650,
+      originalPrice: 900,
+      image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
+      location: "Nashville, TN",
+      distance: "45.2 km",
+      seller: "MusicianLife",
+      rating: 4.7,
+      condition: "Excellent",
+      category: "Music",
+      tags: ["guitar", "electric", "fender"],
+      timePosted: "8 hours ago",
+      verified: true
+    },
+    {
+      id: 9,
+      title: "Mountain Bike - Trek Full Suspension",
+      price: 1200,
+      originalPrice: 1800,
+      image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop",
+      location: "Denver, CO",
+      distance: "35.1 km",
+      seller: "OutdoorAdventurer",
+      rating: 4.6,
+      condition: "Good",
+      category: "Sports",
+      tags: ["bicycle", "mountain", "trek"],
+      timePosted: "12 hours ago",
+      verified: true
+    },
+    {
+      id: 10,
+      title: "Dining Table Set - Wooden Oak",
+      price: 450,
+      originalPrice: 750,
+      image: "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop",
+      location: "Austin, TX",
+      distance: "18.9 km",
+      seller: "FurnitureDeals",
+      rating: 4.4,
+      condition: "Good",
+      category: "Home",
+      tags: ["dining", "wooden", "family"],
+      timePosted: "1 day ago",
+      verified: true
+    },
+    {
+      id: 11,
+      title: "Smart Watch Apple Series 8",
+      price: 320,
+      originalPrice: 450,
+      image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400&h=300&fit=crop",
+      location: "Chicago, IL",
+      distance: "7.4 km",
+      seller: "TechGuru2023",
+      rating: 4.8,
+      condition: "Like New",
+      category: "Electronics",
+      tags: ["smartwatch", "apple", "fitness"],
+      timePosted: "3 hours ago",
+      verified: true
+    },
+    {
+      id: 12,
+      title: "Designer Handbag - Coach Original",
+      price: 280,
+      originalPrice: 480,
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
+      location: "Miami, FL",
+      distance: "22.6 km",
+      seller: "LuxuryFashion",
+      rating: 4.9,
+      condition: "Excellent",
+      category: "Fashion",
+      tags: ["handbag", "coach", "luxury"],
+      timePosted: "5 hours ago",
+      verified: true
     }
   ]);
 
@@ -82,6 +225,7 @@ const Index = () => {
     { id: "home", name: "Home & Garden", icon: "🏠" },
     { id: "vehicles", name: "Vehicles", icon: "🚗" },
     { id: "sports", name: "Sports", icon: "⚽" },
+    { id: "music", name: "Music", icon: "🎵" },
     { id: "books", name: "Books", icon: "📚" }
   ];
 
