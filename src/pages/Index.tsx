@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +22,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("buy");
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [wishlistedItems, setWishlistedItems] = useState<number[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   
   useEffect(() => {
     // Get user data from localStorage
@@ -305,6 +305,7 @@ const Index = () => {
 
   const handleContact = (productId: number) => {
     console.log("Opening chat for product:", productId);
+    setSelectedProductId(productId);
     setShowChatModal(true);
     toast.success("Opening chat with seller...");
   };
@@ -320,6 +321,15 @@ const Index = () => {
         return [...prev, productId];
       }
     });
+  };
+
+  const handleView = (productId: number) => {
+    console.log("Viewing product details for:", productId);
+    const product = products.find(p => p.id === productId);
+    if (product) {
+      toast.success(`Viewing ${product.title}`);
+      // Here you could open a detailed product view modal or navigate to a product detail page
+    }
   };
 
   const handleSellSubmit = (data: any) => {
@@ -349,6 +359,19 @@ const Index = () => {
   const handleFilterClick = () => {
     console.log("Filter button clicked");
     toast.info("Advanced filters coming soon!");
+  };
+
+  const handleLocationChange = (location: string) => {
+    console.log("Location changed to:", location);
+    setSelectedLocation(location);
+    toast.success(`Location updated to ${location}`);
+  };
+
+  const handleCategorySelect = (categoryId: string) => {
+    console.log("Category selected:", categoryId);
+    setSelectedCategory(categoryId);
+    const categoryName = categories.find(c => c.id === categoryId)?.name || "All Categories";
+    toast.success(`Showing ${categoryName}`);
   };
 
   return (
@@ -503,6 +526,7 @@ const Index = () => {
                   product={product}
                   onContact={handleContact}
                   onWishlist={handleWishlist}
+                  onView={handleView}
                 />
               ))}
             </div>

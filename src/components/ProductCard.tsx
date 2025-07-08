@@ -26,15 +26,35 @@ interface ProductCardProps {
   product: Product;
   onContact: (productId: number) => void;
   onWishlist: (productId: number) => void;
+  onView?: (productId: number) => void;
 }
 
-const ProductCard = ({ product, onContact, onWishlist }: ProductCardProps) => {
+const ProductCard = ({ product, onContact, onWishlist, onView }: ProductCardProps) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleWishlist = () => {
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Wishlist button clicked for product:", product.id);
     setIsWishlisted(!isWishlisted);
     onWishlist(product.id);
+  };
+
+  const handleContact = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Contact button clicked for product:", product.id);
+    onContact(product.id);
+  };
+
+  const handleView = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("View button clicked for product:", product.id);
+    if (onView) {
+      onView(product.id);
+    } else {
+      // Default view action - could open a detailed view modal
+      console.log("Opening detailed view for product:", product.id);
+    }
   };
 
   const discountPercentage = product.originalPrice 
@@ -58,11 +78,20 @@ const ProductCard = ({ product, onContact, onWishlist }: ProductCardProps) => {
         <div className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
           isHovered ? 'opacity-100' : 'opacity-0'
         } flex items-center justify-center space-x-2`}>
-          <Button size="sm" variant="secondary" className="backdrop-blur-sm">
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="backdrop-blur-sm bg-white/90 hover:bg-white text-black"
+            onClick={handleView}
+          >
             <Eye className="w-4 h-4 mr-1" />
             View
           </Button>
-          <Button size="sm" onClick={() => onContact(product.id)} className="backdrop-blur-sm">
+          <Button 
+            size="sm" 
+            className="backdrop-blur-sm bg-purple-600 hover:bg-purple-700 text-white"
+            onClick={handleContact}
+          >
             <MessageCircle className="w-4 h-4 mr-1" />
             Contact
           </Button>
@@ -120,11 +149,11 @@ const ProductCard = ({ product, onContact, onWishlist }: ProductCardProps) => {
           {/* Price */}
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-green-600">
-              ${product.price}
+              ₹{product.price.toLocaleString()}
             </span>
             {product.originalPrice && (
               <span className="text-sm text-gray-500 line-through">
-                ${product.originalPrice}
+                ₹{product.originalPrice.toLocaleString()}
               </span>
             )}
           </div>
@@ -174,13 +203,18 @@ const ProductCard = ({ product, onContact, onWishlist }: ProductCardProps) => {
           <div className="flex gap-2 pt-2">
             <Button
               size="sm"
-              onClick={() => onContact(product.id)}
+              onClick={handleContact}
               className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
             >
               <MessageCircle className="w-4 h-4 mr-1" />
               Contact
             </Button>
-            <Button size="sm" variant="outline" className="px-3">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="px-3"
+              onClick={handleView}
+            >
               <Eye className="w-4 h-4" />
             </Button>
           </div>
